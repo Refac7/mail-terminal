@@ -1,0 +1,110 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+}
+const { title } = Astro.props;
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" href="/favicon.png" />
+    <title>{title} // MAIL_TERM</title>
+    
+    <!-- 主题初始化脚本（防 FOUC） -->
+    <script is:inline>
+      (function() {
+        // 当前激活的主题模式：'light' | 'dark' | 'system'
+        let currentMode = 'system';
+        let mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        let systemListener = null;
+
+        // 根据实际颜色设置 <html> 的 dark 类
+        function applyColorScheme(scheme) {
+          if (scheme === 'dark') {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        }
+
+        // 根据 mode 更新页面主题
+        function applyMode(mode) {
+          if (mode === 'system') {
+            // 跟随系统：根据当前系统偏好设置
+            applyColorScheme(mediaQuery.matches ? 'dark' : 'light');
+          } else {
+            // 强制亮/暗
+            applyColorScheme(mode);
+          }
+        }
+
+        // 处理系统主题变化的回调
+        function handleSystemChange(e) {
+          // 只有当前模式为 'system' 时才自动更新
+          if (currentMode === 'system') {
+            applyColorScheme(e.matches ? 'dark' : 'light');
+          }
+        }
+
+        // 对外暴露的切换主题方法（供 UI 调用）
+        window.__setTheme = function(mode) {
+          if (!['light', 'dark', 'system'].includes(mode)) return;
+          
+          // 保存用户偏好
+          localStorage.setItem('theme', mode);
+          
+          // 更新当前模式
+          currentMode = mode;
+          
+          // 移除旧的系统监听器
+          if (systemListener) {
+            mediaQuery.removeEventListener('change', systemListener);
+            systemListener = null;
+          }
+          
+          // 应用新模式
+          applyMode(mode);
+          
+          // 如果是 system 模式，添加监听器
+          if (mode === 'system') {
+            systemListener = handleSystemChange;
+            mediaQuery.addEventListener('change', systemListener);
+          }
+        };
+
+        // 初始化：读取 localStorage，若无则默认 'system'
+        let stored = localStorage.getItem('theme');
+        if (!stored) {
+          stored = 'system';
+          localStorage.setItem('theme', stored); // 可选，让后续访问有默认值
+        }
+        
+        // 调用 setTheme 完成初始化（会自动处理监听器）
+        window.__setTheme(stored);
+      })();
+    </script>
+
+    <!-- 屏蔽 findDOMNode 警告（原有保留） -->
+    <script is:inline>
+      const originalError = console.error;
+      console.error = (...args) => {
+        if (typeof args[0] === 'string' && args[0].includes('findDOMNode')) {
+          return;
+        }
+        originalError.call(console, ...args);
+      };
+    </script>
+  </head>
+  <body class="antialiased selection:bg-primary/20 selection:text-primary relative">
+    
+    <!-- 背景网格纹理（不变） -->
+    <div class="fixed inset-0 pointer-events-none z-0 opacity-[0.03] dark:opacity-[0.05] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
+    <div class="fixed inset-0 pointer-events-none z-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:40px_40px] opacity-20"></div>
+
+    <slot />
+
+  </body>
+</html>

@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* 浅色模式 (Light) */
+    --background: 0 0% 100%;       /* #ffffff */
+    --foreground: 240 10% 3.9%;    /* #09090b */
+    --primary: 142.1 76.2% 36.3%;  /* #16a34a (Green-600) - 工业绿 */
+    --border: 240 5.9% 90%;        /* #e4e4e7 */
+    --muted: 240 4.8% 95.9%;       /* #f4f4f5 */
+    --muted-foreground: 240 3.8% 46.1%;
+  }
+
+  .dark {
+    /* 深色模式 (Dark) */
+    --background: 240 10% 3.9%;    /* #09090b */
+    --foreground: 0 0% 98%;        /* #fafafa */
+    --primary: 142.1 70.6% 45.3%;  /* #22c55e (Green-500) - 荧光绿 */
+    --border: 240 3.7% 15.9%;      /* #27272a */
+    --muted: 240 3.7% 15.9%;       /* #27272a */
+    --muted-foreground: 240 5% 64.9%;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* 修复 React-Quill 编辑器样式 */
+.ql-toolbar {
+  @apply border-border bg-muted/20 !important;
+}
+
+.ql-toolbar .ql-stroke {
+  @apply stroke-foreground !important;
+}
+
+.ql-toolbar .ql-fill {
+  @apply fill-foreground !important;
+}
+
+.ql-container {
+  @apply border-border font-mono text-sm !important;
+}
+
+.ql-editor {
+  @apply bg-background text-foreground min-h-[400px] !important;
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-muted;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-border hover:bg-primary/50 transition-colors;
+}

@@ -1,0 +1,47 @@
+---
+import Layout from '../components/Layout.astro';
+import { verifyToken } from '../lib/auth';
+import MailComposer from '../components/MailComposer.jsx';
+
+// 服务端验证：如果未登录，重定向到登录页
+const isAuthed = verifyToken(Astro.request);
+if (!isAuthed) {
+  return Astro.redirect('/login');
+}
+
+---
+
+<Layout title="Dashboard">
+  <div class="min-h-screen p-6 sm:p-8 lg:p-12 max-w-[1600px] mx-auto">
+    {/* 顶部状态栏 */}
+    <header class="flex justify-between items-end mb-12 border-b-2 border-foreground pb-4">
+        <div>
+            <h1 class="text-4xl font-black tracking-tighter mt-10 mb-2">SMTP<span class="text-primary font-black">.</span>UPLINK</h1>
+            <p class="text-xs font-mono text-muted-foreground tracking-widest">SECURE TRANSMISSION PROTOCOL // V1.0</p>
+        </div>
+        <div class="hidden sm:block text-right">
+            <div class="flex items-center justify-end gap-2 text-primary text-xs font-mono mb-1">
+                <span class="relative flex h-2 w-2">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                </span>
+                <span>CONNECTED</span>
+            </div>
+            <p class="text-[10px] text-muted-foreground/50 uppercase">User: Admin_Root</p>
+        </div>
+    </header>
+
+    {/* 主应用区域 - 纯 React 组件接管交互 */}
+    <main class="bg-background border border-border p-6 relative">
+        {/* 装饰角落 */}
+        <div class="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-primary"></div>
+        <div class="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-primary"></div>
+        
+        <MailComposer client:only="react" />
+    </main>
+    
+    <footer class="mt-12 text-center">
+        <p class="text-[10px] font-mono text-muted-foreground/30 uppercase tracking-[0.2em]">End of Line // System Check OK</p>
+    </footer>
+  </div>
+</Layout>
