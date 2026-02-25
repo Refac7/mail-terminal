@@ -10,4 +10,7 @@ export default defineConfig({
     react({ includeAsyncSecrets: true, experimentalReactChildren: true }),
     tailwind()
   ],
+  security: {
+    checkOrigin: false
+  }
 });
