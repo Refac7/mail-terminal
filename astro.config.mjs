@@ -1,18 +1,13 @@
 import { defineConfig } from 'astro/config';
-import node from '@astrojs/node';
+import vercel from '@astrojs/vercel/serverless'; // 或 '@astrojs/vercel/static' 如果是静态输出
 import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
 
 export default defineConfig({
-  output: 'server',
-  adapter: node({
-    mode: 'standalone',
-  }),
+  output: 'server',          // 保持 server 模式，让 Vercel 动态渲染
+  adapter: vercel(),         // 使用 Vercel 适配器
   integrations: [
-    // 关键：关闭 includeAsyncSecrets 以避免部分 SSR 问题
-    // 关闭 StrictMode 以消除 react-quill 的 findDOMNode 警告
-    react({ includeAsyncSecrets: true, experimentalReactChildren: true }), 
+    react({ includeAsyncSecrets: true, experimentalReactChildren: true }),
     tailwind()
   ],
-  // 移除之前的 vite.ssr.external 配置，因为不再需要 better-sqlite3
 });
