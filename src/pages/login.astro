@@ -7,58 +7,79 @@ if (verifyToken(Astro.request)) {
 }
 ---
 
-<Layout title="Access Control">
-  <div class="flex items-center justify-center min-h-screen p-4">
-    <div class="w-full max-w-md border border-border p-8 relative overflow-hidden group">
-       
-       <div class="absolute top-0 inset-x-0 h-1 bg-primary transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+<Layout title="Auth">
+  <div class="flex flex-col items-center justify-center min-h-screen p-4 relative">
+    
+    <!-- 装饰性工业标记 -->
+    <div class="absolute top-8 left-8 text-[10px] font-mono text-muted-foreground vertical-text hidden sm:block">
+        SYS.CONFIG.V2 // SECURE
+    </div>
 
-       <div class="mb-8">
-         <h2 class="text-2xl font-bold font-mono uppercase tracking-tighter mb-2">Identity Verify</h2>
-         <p class="text-xs text-muted-foreground font-mono">Input credentials to access SMTP Uplink.</p>
+    <div class="w-full max-w-sm bg-card border-2 border-border relative">
+       <!-- 顶部高亮条 (工业橙) -->
+       <div class="h-1 w-full bg-primary"></div>
+
+       <div class="p-8 sm:p-10 space-y-8">
+         <div class="space-y-2 border-l-4 border-foreground pl-4">
+           <h2 class="text-3xl font-black uppercase tracking-tighter leading-none">Access<br/>Control</h2>
+           <p class="text-[10px] font-mono text-muted-foreground uppercase tracking-widest">Restricted Area // Auth Required</p>
+         </div>
+
+         <form id="login-form" class="space-y-6 mt-8">
+            <div class="relative group">
+               <label class="absolute -top-2 left-2 bg-card px-1 text-[10px] font-bold font-mono text-foreground">PASSCODE</label>
+               <input 
+                 type="password" 
+                 id="password" 
+                 placeholder="••••••••"
+                 class="w-full bg-transparent border-2 border-border p-4 mt-2 text-center font-mono text-xl tracking-[0.5em] placeholder:tracking-normal focus:border-primary transition-colors" 
+               />
+               <!-- 角落装饰 -->
+               <div class="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-foreground opacity-50"></div>
+            </div>
+            
+            <button type="submit" class="w-full py-4 bg-foreground text-background font-mono font-bold text-sm uppercase tracking-widest hover:bg-primary hover:text-white transition-colors border-2 border-transparent relative overflow-hidden">
+               <span class="relative z-10">Initialize Session</span>
+            </button>
+            
+            <div class="h-4 flex items-center justify-center">
+                <p id="error-msg" class="text-[10px] font-mono text-primary bg-primary/10 px-2 py-0.5 uppercase opacity-0 transition-opacity">
+                    Error: Invalid Credentials
+                </p>
+            </div>
+         </form>
        </div>
 
-       <form id="login-form" class="space-y-6">
-          <div>
-             <label class="block text-[10px] uppercase font-mono tracking-widest mb-2 text-muted-foreground">Passcode</label>
-             <input type="password" id="password" class="w-full bg-muted/5 border border-border p-3 text-center tracking-[0.5em] font-mono focus:border-primary focus:outline-none transition-colors text-xl" />
-          </div>
-          <button type="submit" class="w-full py-4 bg-foreground text-background font-mono font-bold uppercase tracking-widest hover:bg-primary transition-colors">
-             Initialize
-          </button>
-          <p id="error-msg" class="text-xs font-mono text-red-500 text-center h-4 opacity-0 transition-opacity">ACCESS_DENIED</p>
-       </form>
+       <!-- 底部元数据 -->
+       <div class="border-t border-border p-3 bg-muted/30 flex justify-between items-center text-[10px] font-mono text-muted-foreground">
+           <span>ID: 884-XJ-02</span>
+           <span class="w-2 h-2 bg-border block"></span>
+       </div>
     </div>
   </div>
 
 <script>
     const form = document.getElementById('login-form');
-    
     form?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    // 类型断言：告诉 TS 这是一个 Input 元素
-    const passwordInput = document.getElementById('password') as HTMLInputElement;
-    const msg = document.getElementById('error-msg');
-    
-    if (!passwordInput || !msg) return;
+        e.preventDefault();
+        const passwordInput = document.getElementById('password') as HTMLInputElement;
+        const msg = document.getElementById('error-msg');
+        if (!passwordInput || !msg) return;
 
-    const pwd = passwordInput.value;
-    
-    try {
-        const res = await fetch('/api/auth/login', {
-            method: 'POST',
-            body: JSON.stringify({ password: pwd })
-        });
-        if (res.ok) {
-            window.location.href = '/';
-        } else {
-            msg.classList.remove('opacity-0');
-            setTimeout(() => msg.classList.add('opacity-0'), 2000);
+        try {
+            const res = await fetch('/api/auth/login', {
+                method: 'POST',
+                body: JSON.stringify({ password: passwordInput.value })
+            });
+            if (res.ok) {
+                window.location.href = '/';
+            } else {
+                msg.classList.remove('opacity-0');
+                setTimeout(() => msg.classList.add('opacity-0'), 2000);
+            }
+        } catch (err) {
+            console.error(err);
         }
-    } catch (err) {
-        console.error(err);
-    }
     });
 </script>
 </Layout>
