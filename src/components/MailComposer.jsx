@@ -87,7 +87,7 @@ export default function MailComposer() {
   // 工业风输入框样式：无背景，仅下边框，焦点时下边框变色
   const INPUT_WRAPPER = "group relative mb-6";
   const LABEL_CLASS = "block text-[10px] font-bold font-mono text-muted-foreground uppercase tracking-widest mb-1 group-focus-within:text-primary transition-colors";
-  const INPUT_CLASS = "w-full bg-transparent border-b-2 border-border py-2 font-mono text-sm focus:border-primary focus:outline-none transition-colors placeholder:text-muted-foreground/30";
+  const INPUT_CLASS = "w-full bg-transparent border-b-2 border-border p-2 font-mono text-sm focus:border-primary focus:outline-none transition-colors placeholder:text-muted-foreground/30";
 
   return (
     <div className="flex flex-col lg:flex-row h-full min-h-[600px]">
