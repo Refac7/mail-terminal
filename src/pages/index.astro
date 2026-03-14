@@ -12,21 +12,14 @@ if (!isAuthed) {
 <Layout title="Terminal">
   <div class="flex flex-col min-h-screen border-x border-border">
     
-    {/* 顶部工业栏 */}
     <header class="border-b border-border bg-card p-6 sm:p-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 relative overflow-hidden">
-        <!-- 装饰斜线背景 -->
-        <div class="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
-             <div class="w-32 h-32 border border-foreground rounded-full flex items-center justify-center">
-                <div class="w-24 h-24 border border-foreground rounded-full"></div>
-             </div>
-        </div>
 
         <div class="z-10">
             <div class="flex items-center gap-3 mb-2">
                 <span class="w-3 h-3 bg-primary block"></span>
                 <span class="text-[10px] font-mono text-muted-foreground uppercase tracking-widest">Protocol V.1.0</span>
             </div>
-            <h1 class="text-5xl sm:text-6xl font-black tracking-tighter text-foreground uppercase leading-[0.9]">
+            <h1 class="text-5xl sm:text-6xl font-mono font-black tracking-tighter text-foreground uppercase leading-[0.9]">
                 SMTP<br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-foreground to-foreground/50">Uplink</span>
             </h1>
         </div>
@@ -49,14 +42,8 @@ if (!isAuthed) {
         </div>
     </header>
 
-    {/* 主操作区 */}
     <main class="flex-1 p-0 relative bg-background">
         <MailComposer client:only="react" />
     </main>
-    
-    <footer class="border-t border-border p-4 flex justify-between items-center bg-muted/30">
-        <p class="text-[10px] font-mono text-muted-foreground uppercase">System Output // End of Line</p>
-        <p class="text-[10px] font-mono text-muted-foreground">127.0.0.1</p>
-    </footer>
   </div>
 </Layout>

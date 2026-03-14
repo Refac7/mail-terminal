@@ -20,7 +20,6 @@ export const POST: APIRoute = async ({ request }) => {
         const smtpPass = import.meta.env.SMTP_PASS;
         const senderName = import.meta.env.SENDER_NAME || 'Terminal Mailer';
         
-        // [修复] 获取独立的发件人邮箱，如果没有则回退到 smtpUser (兼容普通邮箱)
         const senderEmail = import.meta.env.SENDER_EMAIL || smtpUser;
 
         if (!smtpUser || !smtpPass) {

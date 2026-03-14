@@ -12,9 +12,7 @@ const { title } = Astro.props;
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" href="/favicon.png" />
     <title>{title} // SYSTEM</title>
-    
-    <!-- 主题初始化脚本 (保持不变) -->
-    <script is:inline>
+        <script is:inline>
       (function() {
         let currentMode = 'system';
         let mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
@@ -54,7 +52,6 @@ const { title } = Astro.props;
       })();
     </script>
 
-    <!-- 屏蔽 findDOMNode 警告（原有保留） -->
     <script is:inline>
       const originalError = console.error;
       console.error = (...args) => {
@@ -66,14 +63,6 @@ const { title } = Astro.props;
     </script>
   </head>
   <body class="antialiased min-h-screen flex flex-col">
-    
-    <!-- 工业网格背景 -->
-    <div class="fixed inset-0 pointer-events-none z-[-1] bg-background">
-        <!-- 主网格 -->
-        <div class="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-[0.4]"></div>
-        <!-- 子网格 -->
-        <div class="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:1rem_1rem] opacity-[0.15]"></div>
-    </div>
 
     <slot />
 
