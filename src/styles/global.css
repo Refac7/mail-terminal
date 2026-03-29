@@ -4,69 +4,106 @@
 
 @layer base {
   :root {
-    /* 亮色模式：类似工程图纸 */
-    --background: 0 0% 98%;        /* #fafafa */
-    --foreground: 0 0% 5%;         /* #0d0d0d */
-    --card: 0 0% 100%;             /* #ffffff */
-    --primary: 24 95% 50%;         /* #fa550f (International Orange) - 工业橙 */
-    --border: 0 0% 85%;            /* #d9d9d9 */
-    --strong-border: 0 0% 0%;      /* #000000 */
-    --muted: 0 0% 96%;             /* #f5f5f5 */
-    --muted-foreground: 0 0% 40%;
+    /* 亮色模式：极简干净，类似 Notion / Vercel 的纯白与锌灰 */
+    --background: 0 0% 100%;       /* 纯白背景 */
+    --foreground: 240 10% 3.9%;    /* 极深灰（几乎黑），提升阅读舒适度 */
+    --card: 0 0% 100%;             /* 纯白卡片 */
+    --primary: 240 5.9% 10%;       /* 主题色（黑色），用于按钮和焦点框 */
+    --border: 240 5.9% 90%;        /* 极浅的灰色边框，提供恰到好处的分割 */
+    --muted: 240 4.8% 95.9%;       /* 弱化背景，用于侧边栏或底色 */
+    --muted-foreground: 240 3.8% 46.1%; /* 弱化文本 */
   }
 
   .dark {
-    /* 暗色模式：类似精密仪器面板 */
-    --background: 0 0% 5%;         /* #0d0d0d */
-    --foreground: 0 0% 95%;        /* #f2f2f2 */
-    --card: 0 0% 8%;               /* #141414 */
-    --primary: 24 95% 50%;         /* #fa550f 保持橙色，或用荧光黄 */
-    --border: 0 0% 20%;            /* #333333 */
-    --strong-border: 0 0% 100%;    /* #ffffff */
-    --muted: 0 0% 12%;             /* #1f1f1f */
-    --muted-foreground: 0 0% 60%;
+    /* 暗色模式：深邃、克制，类似 Linear 的深色画布 */
+    --background: 240 10% 3.9%;    /* 深灰黑背景 */
+    --foreground: 0 0% 98%;        /* 纯白文本 */
+    --card: 240 10% 3.9%;          /* 深色卡片 */
+    --primary: 0 0% 98%;           /* 主题色（白色） */
+    --border: 240 3.7% 15.9%;      /* 深色边框 */
+    --muted: 240 3.7% 15.9%;       /* 弱化背景 */
+    --muted-foreground: 240 5% 64.9%; /* 弱化文本 */
   }
 
   body {
-    @apply bg-background text-foreground;
-    font-feature-settings: "ss01", "ss02", "cv01", "cv02"; /* 启用字体特性能让 sans-serif 更具科技感 */
+    @apply bg-background text-foreground antialiased;
+    text-rendering: optimizeLegibility; /* 提升现代无衬线字体的渲染质量 */
   }
 
-  /* 全局去圆角 */
+  /* 核心灵魂：强制全局绝对直角 */
   * {
     @apply rounded-none !important;
   }
+
+  /* 优雅的文本选中高亮 */
+  ::selection {
+    @apply bg-foreground/10 text-foreground;
+  }
 }
 
-/* 修复 React-Quill 编辑器样式 - 工业化改造 */
+/* ==========================================
+   React-Quill 编辑器样式 - 现代文档改造 (Notion/Linear 风)
+   ========================================== */
+
+/* 顶部工具栏：融入背景，极简边框 */
 .ql-toolbar {
-  @apply border-b border-border bg-muted/30 p-2 !important;
+  @apply border-b border-border bg-transparent p-3 !important;
   border-top: none !important;
   border-left: none !important;
   border-right: none !important;
 }
 
+/* 工具栏按钮悬浮状态：直角底色 */
+.ql-toolbar button:hover,
+.ql-toolbar button:focus {
+  @apply bg-muted text-foreground !important;
+}
+
+/* 编辑器主容器：去除自带边框 */
 .ql-container {
-  @apply border-none font-mono text-sm !important;
+  @apply border-none font-sans text-base !important;
 }
 
+/* 编辑器输入区：舒适的呼吸感、现代排版 */
 .ql-editor {
-  @apply bg-transparent text-foreground min-h-[400px] p-4 !important;
+  @apply bg-transparent text-foreground min-h-[400px] p-6 sm:p-8 leading-relaxed !important;
 }
 
-/* 定制复选框/输入框焦点 */
+/* 编辑器内部排版优化 */
+.ql-editor h1, .ql-editor h2 {
+  @apply font-semibold tracking-tight text-foreground mb-4 mt-6 !important;
+}
+.ql-editor h1 {
+  @apply text-3xl !important;
+}
+.ql-editor h2 {
+  @apply text-2xl !important;
+}
+.ql-editor p {
+  @apply mb-3 !important;
+}
+.ql-editor a {
+  @apply text-foreground underline underline-offset-4 decoration-border hover:decoration-foreground transition-colors !important;
+}
+
+/* ==========================================
+   表单元素全局状态
+   ========================================== */
 input:focus, textarea:focus, select:focus {
-  @apply outline-none ring-1 ring-primary border-primary !important;
+  /* 现代 SaaS 风格的直角输入框焦点：犀利的 1px 边框或直接使用轮廓 */
+  @apply outline-none border-primary ring-1 ring-primary transition-colors !important;
 }
 
-/* 工业风格滚动条 */
+/* ==========================================
+   滚动条 - 极简隐形设计
+   ========================================== */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
-  @apply bg-muted;
+  @apply bg-transparent; /* 轨道透明，更加干净 */
 }
 ::-webkit-scrollbar-thumb {
-  @apply bg-foreground/20 hover:bg-primary transition-colors;
+  @apply bg-border hover:bg-muted-foreground transition-colors;
 }
